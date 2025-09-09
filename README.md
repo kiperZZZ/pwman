@@ -1,23 +1,23 @@
-# 🔐 PWMan - Password Manager en C
+# PWMan - Password Manager in C
 
-Un gestionnaire de mots de passe minimaliste développé entièrement en C pour Linux x86_64, utilisant uniquement des appels système sans dépendances aux bibliothèques standard.
+A minimalist password manager developed entirely in C for Linux x86_64, using only system calls without dependencies on standard libraries.
 
-## 🎯 Caractéristiques
+## Features
 
-- **Sans bibliothèques standard** : Compilé avec `-nostdlib -fno-builtin`
-- **Interface en ligne de commande** simple et intuitive
-- **Chiffrement XOR** pour sécuriser les données stockées
-- **Gestion de coffre-fort** avec mot de passe maître
-- **Implémentation libc personnalisée** réutilisée du projet 0x41sh
-- **Appels système directs** pour toutes les opérations
+- **No standard libraries**: Compiled with `-nostdlib -fno-builtin`
+- **Simple and intuitive command-line interface**
+- **XOR encryption** to secure stored data
+- **Vault management** with master password
+- **Custom libc implementation** reused from the 0x41sh project
+- **Direct system calls** for all operations
 
-## 📋 Prérequis
+## Prerequisites
 
 - Linux x86_64
 - GCC (GNU Compiler Collection)
 - NASM (Netwide Assembler)
 
-## 🚀 Installation
+## Installation
 
 ```bash
 git clone https://github.com/kiperZZZ/pwman.git
@@ -25,109 +25,109 @@ cd pwman
 make
 ```
 
-## 💻 Utilisation
+## Usage
 
-### Initialiser un nouveau coffre-fort
+### Initialize a new vault
 ```bash
 ./pwman init vault.db
 ```
 
-### Lister toutes les entrées
+### List all entries
 ```bash
 ./pwman list vault.db
 ```
 
-### Ajouter une nouvelle entrée
+### Add a new entry
 ```bash
 ./pwman add vault.db
 ```
 
-### Récupérer un mot de passe
+### Retrieve a password
 ```bash
 ./pwman get vault.db github.com
 ```
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 pwman/
 ├── src/
-│   ├── main.c          # Programme principal et parsing CLI
-│   ├── crypto.c        # Fonctions de chiffrement/déchiffrement
-│   ├── database.c      # Opérations base de données (CRUD)
-│   └── libc/           # Implémentation libc personnalisée
+│   ├── main.c          # Main program and CLI parsing
+│   ├── crypto.c        # Encryption/decryption functions
+│   ├── database.c      # Database operations (CRUD)
+│   └── libc/           # Custom libc implementation
 ├── include/
-│   ├── libc/           # Fichiers d'en-tête
-│   └── pwman.h         # Définitions principales
-├── crt0.asm           # Code de démarrage assembleur
-└── Makefile           # Configuration de build
+│   ├── libc/           # Header files
+│   └── pwman.h         # Main definitions
+├── crt0.asm           # Assembly startup code
+└── Makefile           # Build configuration
 ```
 
-## 🔧 Fonctionnalités techniques
+## Technical Features
 
-### Gestion mémoire
-- `malloc()`, `free()`, `realloc()` - Allocation mémoire
-- `sbrk()`, `brk()` - Gestion du tas
+### Memory Management
+- `malloc()`, `free()`, `realloc()` - Memory allocation
+- `sbrk()`, `brk()` - Heap management
 
-### Opérations I/O
-- `read()`, `write()` - E/S fichier
-- `printf()`, `puts()`, `putchar()` - Sortie
-- `getline()` - Saisie de ligne
+### I/O Operations
+- `read()`, `write()` - File I/O
+- `printf()`, `puts()`, `putchar()` - Output
+- `getline()` - Line input
 
-### Opérations chaînes
-- `strcmp()`, `strncmp()` - Comparaison de chaînes
-- `strlen()`, `strcpy()`, `strcat()` - Manipulation de chaînes
+### String Operations
+- `strcmp()`, `strncmp()` - String comparison
+- `strlen()`, `strcpy()`, `strcat()` - String manipulation
 
-## 🔒 Sécurité
+## Security
 
-- **Pas de stockage en texte clair** : Tous les mots de passe sont chiffrés
-- **Hachage du mot de passe maître** : Le mot de passe maître n'est jamais stocké en clair
-- **Nettoyage mémoire** : Les données sensibles sont effacées après utilisation
-- **Validation d'entrée** : Vérification des tailles de buffer pour éviter les débordements
+- **No plaintext storage**: All passwords are encrypted
+- **Master password hashing**: Master password is never stored in plaintext
+- **Memory cleanup**: Sensitive data is cleared after use
+- **Input validation**: Buffer size checks to prevent overflows
 
-## 🧪 Tests
+## Testing
 
 ```bash
-# Test des fonctionnalités de base
+# Test basic functionality
 make clean && make
 
-# Test d'initialisation
+# Test initialization
 ./pwman init test_vault.db
 
-# Test d'ajout d'entrées
+# Test adding entries
 ./pwman add test_vault.db
 
-# Test de listage
+# Test listing entries
 ./pwman list test_vault.db
 
-# Test de récupération
+# Test password retrieval
 ./pwman get test_vault.db example.com
 ```
 
-## 🎓 Objectif éducatif
+## Educational Purpose
 
-Ce projet a été développé dans un cadre éducatif pour comprendre :
-- La programmation système en C
-- Les appels système Linux
-- L'implémentation d'une libc personnalisée
-- La compilation sans bibliothèques standard
-- La gestion bas niveau de la mémoire
+This project was developed for educational purposes to understand:
+- System programming in C
+- Linux system calls
+- Custom libc implementation
+- Compilation without standard libraries
+- Low-level memory management
 
-## ⚠️ Limitations
+## Limitations
 
-- **Plateforme spécifique** : Linux x86_64 uniquement
-- **Chiffrement basique** : XOR simple (à des fins éducatives)
-- **Pas de réseau** : Stockage local uniquement
-- **Fonctionnalités limitées** : Gestionnaire minimaliste
+- **Platform specific**: Linux x86_64 only
+- **Basic encryption**: Simple XOR (for educational purposes)
+- **No networking**: Local storage only
+- **Limited features**: Minimalist password manager
 
-## 🤝 Contribution
+## Contributing
 
-Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou proposer une pull request.
+Contributions are welcome! Feel free to open an issue or submit a pull request.
 
-## 📄 Licence
+## License
 
-Ce projet est développé à des fins éducatives. Consultez le fichier LICENSE pour plus de détails.
+This project is developed for educational purposes. See the LICENSE file for more details.
 
 ---
 
-**Note** : Ce gestionnaire de mots de passe utilise un chiffrement simple à des fins éducatives. Pour un usage en production, utilisez des solutions de chiffrement plus robustes.
+**Note**: This password manager uses simple encryption for educational purposes. For production use, employ more robust encryption solutions.
