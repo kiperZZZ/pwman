@@ -61,3 +61,7 @@ test_*
 demo_*
 simple_*
 final_*
+
+# Claude Code configuration
+CLAUDE.md
+.claude/
