@@ -2,10 +2,10 @@
 
 static void print_usage() {
     puts("Usage:\n");
-    puts("  ./pwman init <db_file>           # Initialise un nouveau coffre-fort\n");
-    puts("  ./pwman list <db_file>           # Liste toutes les entrees\n");
-    puts("  ./pwman get <db_file> <entry>    # Recupere un mot de passe\n");
-    puts("  ./pwman add <db_file>            # Ajoute une nouvelle entree\n");
+    puts("  ./pwman init <db_file>           # Initialize a new vault\n");
+    puts("  ./pwman list <db_file>           # List all entries\n");
+    puts("  ./pwman get <db_file> <entry>    # Retrieve a password\n");
+    puts("  ./pwman add <db_file>            # Add a new entry\n");
 }
 
 static ssize_t read_line(char *buf, size_t size) {
@@ -26,15 +26,15 @@ static ssize_t read_line(char *buf, size_t size) {
 int handle_init(const char *db_file) {
     char pass1[MAX_PASSWORD_LEN], pass2[MAX_PASSWORD_LEN];
 
-    printf("Creation du coffre-fort '%s'\n", db_file);
-    printf("Veuillez entrer un mot de passe maitre: ");
+    printf("Creating vault '%s'\n", db_file);
+    printf("Please enter a master password: ");
     if (read_line(pass1, MAX_PASSWORD_LEN) < 0) return 1;
 
-    printf("Confirmez le mot de passe maitre: ");
+    printf("Confirm master password: ");
     if (read_line(pass2, MAX_PASSWORD_LEN) < 0) return 1;
 
     if (strcmp(pass1, pass2) != 0) {
-        puts("Les mots de passe ne correspondent pas.\n");
+        puts("Passwords do not match.\n");
         return 1;
     }
 
@@ -42,25 +42,25 @@ int handle_init(const char *db_file) {
     vault.count = 0;
     
     if (save_vault(db_file, &vault, pass1) != 0) {
-        puts("Erreur lors de la creation du coffre-fort.\n");
+        puts("Error creating vault.\n");
         return 1;
     }
 
-    puts("Coffre-fort cree avec succes !\n");
+    puts("Vault created successfully!\n");
     return 0;
 }
 
 int handle_list(const char *db_file, const char* master_pass) {
     Vault vault;
     if (load_vault(db_file, &vault, master_pass) != 0) {
-        puts("Mot de passe incorrect ou fichier corrompu.\n");
+        puts("Incorrect password or corrupted file.\n");
         return 1;
     }
 
     if (vault.count == 0) {
-        puts("Le coffre-fort est vide.\n");
+        puts("Vault is empty.\n");
     } else {
-        printf("Entrees dans le coffre-fort (%d):\n", vault.count);
+        printf("Entries in vault (%d):\n", vault.count);
         for (int i = 0; i < vault.count; i++) {
             printf("- %s [%s] (%s)\n", vault.entries[i].name, vault.entries[i].platform, vault.entries[i].user);
         }
@@ -71,33 +71,33 @@ int handle_list(const char *db_file, const char* master_pass) {
 int handle_get(const char *db_file, const char *entry_name, const char* master_pass) {
     Vault vault;
     if (load_vault(db_file, &vault, master_pass) != 0) {
-        puts("Mot de passe incorrect ou fichier corrompu.\n");
+        puts("Incorrect password or corrupted file.\n");
         return 1;
     }
 
     for (int i = 0; i < vault.count; i++) {
         if (strcmp(vault.entries[i].name, entry_name) == 0) {
-            printf("Entree: %s\n", vault.entries[i].name);
-            printf("Plateforme: %s\n", vault.entries[i].platform);
-            printf("Utilisateur: %s\n", vault.entries[i].user);
-            printf("Mot de passe: %s\n", vault.entries[i].password);
+            printf("Entry: %s\n", vault.entries[i].name);
+            printf("Platform: %s\n", vault.entries[i].platform);
+            printf("Username: %s\n", vault.entries[i].user);
+            printf("Password: %s\n", vault.entries[i].password);
             return 0;
         }
     }
 
-    printf("Erreur: Aucune entree trouvee pour '%s'.\n", entry_name);
+    printf("Error: No entry found for '%s'.\n", entry_name);
     return 1;
 }
 
 int handle_add(const char *db_file, const char* master_pass) {
     Vault vault;
     if (load_vault(db_file, &vault, master_pass) != 0) {
-        puts("Mot de passe incorrect ou fichier corrompu.\n");
+        puts("Incorrect password or corrupted file.\n");
         return 1;
     }
 
     if (vault.count >= MAX_ENTRIES) {
-        puts("Erreur: Le coffre-fort est plein.\n");
+        puts("Error: Vault is full.\n");
         return 1;
     }
 
@@ -106,29 +106,29 @@ int handle_add(const char *db_file, const char* master_pass) {
     char user[MAX_USER_LEN];
     char pass1[MAX_PASSWORD_LEN], pass2[MAX_PASSWORD_LEN];
 
-    printf("Nom de l'entree: ");
+    printf("Entry name: ");
     if (read_line(entry_name, MAX_NAME_LEN) < 0) return 1;
 
     for (int i = 0; i < vault.count; i++) {
         if (strcmp(vault.entries[i].name, entry_name) == 0) {
-            printf("Erreur: Une entree nommee '%s' existe deja.\n", entry_name);
+            printf("Error: An entry named '%s' already exists.\n", entry_name);
             return 1;
         }
     }
 
-    printf("Plateforme: ");
+    printf("Platform: ");
     if (read_line(platform, MAX_PLATFORM_LEN) < 0) return 1;
 
-    printf("Nom d'utilisateur: ");
+    printf("Username: ");
     if (read_line(user, MAX_USER_LEN) < 0) return 1;
 
-    printf("Mot de passe: ");
+    printf("Password: ");
     if (read_line(pass1, MAX_PASSWORD_LEN) < 0) return 1;
-    printf("Confirmez le mot de passe: ");
+    printf("Confirm password: ");
     if (read_line(pass2, MAX_PASSWORD_LEN) < 0) return 1;
 
     if (strcmp(pass1, pass2) != 0) {
-        puts("Les mots de passe ne correspondent pas.\n");
+        puts("Passwords do not match.\n");
         return 1;
     }
 
@@ -139,13 +139,13 @@ int handle_add(const char *db_file, const char* master_pass) {
     vault.count++;
     
     if (save_vault(db_file, &vault, master_pass) != 0) {
-        puts("Erreur lors de la sauvegarde du coffre-fort.\n");
+        puts("Error saving vault.\n");
         return 1;
     }
 
-    printf("Entree '%s' ajoutee avec succes.\n", entry_name);
-    printf("Plateforme: %s\n", platform);
-    printf("Utilisateur: %s\n", user);
+    printf("Entry '%s' added successfully.\n", entry_name);
+    printf("Platform: %s\n", platform);
+    printf("Username: %s\n", user);
     return 0;
 }
 
@@ -164,7 +164,7 @@ int main(int argc, char **argv) {
     }
 
     char master_pass[MAX_PASSWORD_LEN];
-    printf("Veuillez entrer le mot de passe maitre: ");
+    printf("Please enter master password: ");
     if (read_line(master_pass, MAX_PASSWORD_LEN) < 0) {
         return 1;
     }
@@ -183,7 +183,7 @@ int main(int argc, char **argv) {
         return handle_add(db_file, master_pass);
     }
     else {
-        puts("Commande inconnue.\n");
+        puts("Unknown command.\n");
         print_usage();
         return 1;
     }
