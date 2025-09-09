@@ -65,3 +65,4 @@ final_*
 # Claude Code configuration
 CLAUDE.md
 .claude/
+.gitignore
