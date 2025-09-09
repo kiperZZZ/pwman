@@ -1,0 +1,63 @@
+# Executable binaries
+pwman
+*.exe
+*.out
+
+# Object files
+*.o
+*.obj
+*.a
+*.so
+*.dylib
+
+# Build directory and artifacts
+build/
+dist/
+
+# Database files (may contain sensitive data)
+*.db
+*.vault
+
+# Temporary files
+*~
+*.tmp
+*.temp
+*.swp
+*.swo
+
+# IDE and editor files
+.vscode/
+.idea/
+*.sublime-*
+.DS_Store
+Thumbs.db
+
+# Debug files
+*.dSYM/
+*.dwarf
+*.pdb
+*.map
+
+# Core dumps
+core
+core.*
+vgcore.*
+
+# Log files
+*.log
+
+# Backup files
+*.bak
+*.backup
+*.orig
+
+# OS generated files
+.Trash-*
+*.pid
+
+# Test files
+test_*
+*_test
+demo_*
+simple_*
+final_*
