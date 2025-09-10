@@ -46,6 +46,7 @@ ssize_t read(int fd, void *buf, size_t count);
 int putchar(char c);
 int puts(const char *str);
 ssize_t getline(char **lineptr, size_t *n, int fd);
+ssize_t readline(char *buf, size_t size);
 int close(int fd);
 int open(const char *pathname, int flags, int mode);
 

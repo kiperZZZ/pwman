@@ -8,30 +8,16 @@ static void print_usage() {
     puts("  ./pwman add <db_file>            # Add a new entry\n");
 }
 
-static ssize_t read_line(char *buf, size_t size) {
-    ssize_t i = 0;
-    while (i < size - 1) {
-        ssize_t ret = read(0, &buf[i], 1);
-        if (ret <= 0) return -1;
-        if (buf[i] == '\n') {
-            buf[i] = '\0';
-            return i;
-        }
-        i++;
-    }
-    buf[i] = '\0';
-    return i;
-}
 
 int handle_init(const char *db_file) {
     char pass1[MAX_PASSWORD_LEN], pass2[MAX_PASSWORD_LEN];
 
     printf("Creating vault '%s'\n", db_file);
     printf("Please enter a master password: ");
-    if (read_line(pass1, MAX_PASSWORD_LEN) < 0) return 1;
+    if (readline(pass1, MAX_PASSWORD_LEN) < 0) return 1;
 
     printf("Confirm master password: ");
-    if (read_line(pass2, MAX_PASSWORD_LEN) < 0) return 1;
+    if (readline(pass2, MAX_PASSWORD_LEN) < 0) return 1;
 
     if (strcmp(pass1, pass2) != 0) {
         puts("Passwords do not match.\n");
@@ -107,7 +93,7 @@ int handle_add(const char *db_file, const char* master_pass) {
     char pass1[MAX_PASSWORD_LEN], pass2[MAX_PASSWORD_LEN];
 
     printf("Entry name: ");
-    if (read_line(entry_name, MAX_NAME_LEN) < 0) return 1;
+    if (readline(entry_name, MAX_NAME_LEN) < 0) return 1;
 
     for (int i = 0; i < vault.count; i++) {
         if (strcmp(vault.entries[i].name, entry_name) == 0) {
@@ -117,15 +103,15 @@ int handle_add(const char *db_file, const char* master_pass) {
     }
 
     printf("Platform: ");
-    if (read_line(platform, MAX_PLATFORM_LEN) < 0) return 1;
+    if (readline(platform, MAX_PLATFORM_LEN) < 0) return 1;
 
     printf("Username: ");
-    if (read_line(user, MAX_USER_LEN) < 0) return 1;
+    if (readline(user, MAX_USER_LEN) < 0) return 1;
 
     printf("Password: ");
-    if (read_line(pass1, MAX_PASSWORD_LEN) < 0) return 1;
+    if (readline(pass1, MAX_PASSWORD_LEN) < 0) return 1;
     printf("Confirm password: ");
-    if (read_line(pass2, MAX_PASSWORD_LEN) < 0) return 1;
+    if (readline(pass2, MAX_PASSWORD_LEN) < 0) return 1;
 
     if (strcmp(pass1, pass2) != 0) {
         puts("Passwords do not match.\n");
@@ -165,7 +151,7 @@ int main(int argc, char **argv) {
 
     char master_pass[MAX_PASSWORD_LEN];
     printf("Please enter master password: ");
-    if (read_line(master_pass, MAX_PASSWORD_LEN) < 0) {
+    if (readline(master_pass, MAX_PASSWORD_LEN) < 0) {
         return 1;
     }
 
