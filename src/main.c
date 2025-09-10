@@ -4,7 +4,7 @@ static void print_usage() {
     puts("Usage:\n");
     puts("  ./pwman init <db_file>           # Initialize a new vault\n");
     puts("  ./pwman list <db_file>           # List all entries\n");
-    puts("  ./pwman get <db_file> <entry>    # Retrieve a password\n");
+    puts("  ./pwman get <db_file>            # Retrieve a password\n");
     puts("  ./pwman add <db_file>            # Add a new entry\n");
 }
 
@@ -43,6 +43,12 @@ int handle_list(const char *db_file, const char* master_pass) {
         return 1;
     }
 
+    // Additional safety check (defense in depth)
+    if (vault.count < 0 || vault.count > MAX_ENTRIES) {
+        puts("Error: Corrupted vault data detected.\n");
+        return 1;
+    }
+    
     if (vault.count == 0) {
         puts("Vault is empty.\n");
     } else {
@@ -54,12 +60,22 @@ int handle_list(const char *db_file, const char* master_pass) {
     return 0;
 }
 
-int handle_get(const char *db_file, const char *entry_name, const char* master_pass) {
+int handle_get(const char *db_file, const char* master_pass) {
     Vault vault;
     if (load_vault(db_file, &vault, master_pass) != 0) {
         puts("Incorrect password or corrupted file.\n");
         return 1;
     }
+
+    // Additional safety check (defense in depth)
+    if (vault.count < 0 || vault.count > MAX_ENTRIES) {
+        puts("Error: Corrupted vault data detected.\n");
+        return 1;
+    }
+
+    char entry_name[MAX_NAME_LEN];
+    printf("Entry name to retrieve: ");
+    if (readline(entry_name, MAX_NAME_LEN) < 0) return 1;
 
     for (int i = 0; i < vault.count; i++) {
         if (strcmp(vault.entries[i].name, entry_name) == 0) {
@@ -160,9 +176,8 @@ int main(int argc, char **argv) {
         return handle_list(db_file, master_pass);
     }
     else if (strcmp(command, "get") == 0) {
-        if (argc != 4) { print_usage(); return 1; }
-        const char *entry_name = argv[3];
-        return handle_get(db_file, entry_name, master_pass);
+        if (argc != 3) { print_usage(); return 1; }
+        return handle_get(db_file, master_pass);
     }
     else if (strcmp(command, "add") == 0) {
         if (argc != 3) { print_usage(); return 1; }

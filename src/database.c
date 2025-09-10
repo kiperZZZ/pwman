@@ -61,5 +61,11 @@ int load_vault(const char *filepath, Vault *vault, const char *master_password) 
     chacha20_xor(&ctx, layout.encrypted_vault, sizeof(Vault));
     memcpy(vault, layout.encrypted_vault, sizeof(Vault));
     
+    // Validate vault data to detect wrong password/corrupted data
+    if (vault->count < 0 || vault->count > MAX_ENTRIES) {
+        puts("Error: Invalid vault data. Wrong password or corrupted file.\n");
+        return -1;
+    }
+    
     return 0;
 }
